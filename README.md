@@ -29,11 +29,11 @@ import { BigNumber } from "bignumber.js"; // used as parameter in buildQuoteProv
 * maker: yours eth wallet address;
 * makerTokenAddress: the token address you wish to sell;
 * takerTokenAddress: the token address you wish to buy;
-* makerTokenAmount: the amount you wish to sell (in base units  e.g.: 1 ZRX => new BigNumber(1000000000000000000));
+* makerTokenAmount: the amount you wish to sell (in base units, e.g.: 1 ZRX => new BigNumber(1000000000000000000));
 * milisecondsToExpire: used to calculate the returned order expiration date;
 * relayerUrl: the relayer addres used to get conversion rate and fee;
 * network: the desired Ethereum network
-* return: a promise that will be return a JSon represinting the order.
+* return: a promise that will be return a JSON representing the order.
 
 **buildSignedOrder**
 ```typescript
