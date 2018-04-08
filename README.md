@@ -4,8 +4,8 @@ Llibrary for building orders to use the 0x protocol.
 ## Types
 
 * ZeroExOrderBuilder: main class with the static methods:
->* buildQuoteProviderOrder: creating a order to use in Quote Provider relayer strategy. A relayer will be called to get conversion rate and fees.
->* buildSignedOrder: signing a order. You can use the order returned in previous method.
+  * buildQuoteProviderOrder: creating a order to use in Quote Provider relayer strategy. A relayer will be called to get conversion rate and fees.
+  * buildSignedOrder: signing a order. You can use the order returned in previous method.
 * EthNetwork: enum, used to inform the desired Ethereum network.
 
 ## Installation
