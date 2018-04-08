@@ -1,0 +1,14 @@
+{
+    "defaultSeverity": "warning",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        "interface-name": false,
+        "max-line-length": false,
+        "no-var-requires": false,
+        "object-literal-shorthand": false
+    },
+    "rulesDirectory": []
+}
