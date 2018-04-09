@@ -27,7 +27,7 @@ export class ConnectService {
         });
     }
 
-    public getOrderWithFee(maker: string, makerTokenAddress: string, takerTokenAddress: string, makerTokenAmount: BigNumber, takerTokenAmount: BigNumber, milisecondsToExpire: BigNumber): Promise<Order> {
+    public getOrderWithFee(maker: string, makerTokenAddress: string, takerTokenAddress: string, makerTokenAmount: BigNumber, takerTokenAmount: BigNumber, milisecondsToExpire: number): Promise<Order> {
         const getFeeRequest = {
             exchangeContractAddress: this.exchangeContractAddress,
             expirationUnixTimestampSec: TimeService.getTimeFromNow(milisecondsToExpire),

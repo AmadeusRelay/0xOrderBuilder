@@ -42,7 +42,7 @@ describe("ZeroExOrderBuilder", () => {
             it("should return order", async () => {
                 const order = await ZeroExOrderBuilder.buildQuoteProviderOrder(ConstantsTest.DEFAULT_MAKER_ADDRESS,
                     ConstantsTest.ZRX_ADDRESS, ConstantsTest.WETH_ADDRESS, new BigNumber(1000000000000000000),
-                    new BigNumber(1000), ConstantsTest.REALYER_URL, EthNetwork.Kovan);
+                    10000, ConstantsTest.REALYER_URL, EthNetwork.Kovan);
                 let a = expect(order).to.be.exist;
                 a = expect(order.makerFee.greaterThan(0)).to.be.ok;
             }).timeout(10000);
@@ -53,7 +53,7 @@ describe("ZeroExOrderBuilder", () => {
             it("should return signedOrder", async () => {
                 const order = await ZeroExOrderBuilder.buildQuoteProviderOrder(ConstantsTest.DEFAULT_MAKER_ADDRESS,
                     ConstantsTest.ZRX_ADDRESS, ConstantsTest.WETH_ADDRESS, new BigNumber(1000000000000000000),
-                    new BigNumber(1000), ConstantsTest.REALYER_URL, EthNetwork.Kovan);
+                    10000, ConstantsTest.REALYER_URL, EthNetwork.Kovan);
                 let a = expect(order).to.be.exist;
                 const signOrder = ZeroExOrderBuilder.buildSignedOrder(order, ConstantsTest.DEFAULT_MAKER_PRIVATE_KEY);
                 const hash = ZeroEx.getOrderHashHex(order);

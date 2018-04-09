@@ -24,7 +24,7 @@ import { BigNumber } from "bignumber.js"; // used as parameter in buildQuoteProv
 **buildQuoteProviderOrder** 
 ```typescript
     static buildQuoteProviderOrder(maker: string, makerTokenAddress: string, takerTokenAddress: string, makerTokenAmount: BigNumber, 
-        milisecondsToExpire: BigNumber, relayerUrl: string, network: EthNetwork): Promise<Order>;
+        milisecondsToExpire: number, relayerUrl: string, network: EthNetwork): Promise<Order>;
 ```
 * maker: yours eth wallet address;
 * makerTokenAddress: the token address you wish to sell;
@@ -50,7 +50,7 @@ import { BigNumber } from "bignumber.js";
 
 function testZeroExOrderBuilder() {
     ZeroExOrderBuilder.buildQuoteProviderOrder("0xf60345bcff9feedb98bbdfc996b33cba00ee2c75", "0x6ff6c0ff1d68b964901f986d4c9fa3ac68346570", 
-        "0xd0a1e359811322d97991e03f863a0c30c2cf029c", new BigNumber(1000000000000000000), new BigNumber(10000), 
+        "0xd0a1e359811322d97991e03f863a0c30c2cf029c", new BigNumber(1000000000000000000), 10000, 
         "http://localhost:3000/api/v0", EthNetwork.Kovan).then((order) =>
     {
         const signedOrder = ZeroExOrderBuilder.buildSignedOrder(order, "0x5edd9d13a5d62821bbda8ac6da7d7ca69a1b540dc99ac9232fefc04d09e28055");
