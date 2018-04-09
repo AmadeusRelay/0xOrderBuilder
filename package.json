@@ -1,8 +1,9 @@
 {
   "name": "0xorderbuilder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Llibrary for building orders to use the 0x protocol",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "prebuild": "npm run clean",
     "build": "tsc",
@@ -13,8 +14,13 @@
     "type": "git",
     "url": "git+https://github.com/AmadeusRelay/0xOrderBuilder.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "ethereum",
+    "utilties",
+    "0xRelayer",
+    "AmadeusRelayer"
+  ],
+  "author": "Fábio Cesso <fabio.cesso@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/AmadeusRelay/0xOrderBuilder/issues"
