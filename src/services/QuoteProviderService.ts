@@ -9,7 +9,7 @@ import { ConnectService } from "./ConnectService";
 import { TokenService } from "./TokenService";
 
 export class QuoteProviderService {
-    public static buildOrder(maker: string, makerTokenAddress: string, takerTokenAddress: string, makerTokenAmount: BigNumber, milisecondsToExpire: BigNumber, relayerUrl: string, network: EthNetwork): Promise<Order> {
+    public static buildOrder(maker: string, makerTokenAddress: string, takerTokenAddress: string, makerTokenAmount: BigNumber, milisecondsToExpire: number, relayerUrl: string, network: EthNetwork): Promise<Order> {
         const connectService = new ConnectService(relayerUrl, network);
         const promiseTokenPairs = connectService.getTokenPairs(makerTokenAddress, takerTokenAddress);
 

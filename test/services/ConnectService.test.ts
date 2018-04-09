@@ -35,7 +35,7 @@ describe("ConnectService", () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
                 const order = await service.getOrderWithFee(Constants.DEFAULT_MAKER_ADDRESS,
                     Constants.ZRX_ADDRESS, Constants.WETH_ADDRESS, new BigNumber(100000000000000000000),
-                    new BigNumber(1000000000000000000), new BigNumber(1000));
+                    new BigNumber(1000000000000000000), 10000);
                 const a = expect(order).to.be.exist;
             }).timeout(10000);
         });

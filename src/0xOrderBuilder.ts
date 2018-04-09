@@ -7,7 +7,7 @@ import { SignService } from "./services/SignService";
 
 export class ZeroExOrderBuilder {
 
-    public static buildQuoteProviderOrder(maker: string, makerTokenAddress: string, takerTokenAddress: string, makerTokenAmount: BigNumber, milisecondsToExpire: BigNumber, relayerUrl: string, network: EthNetwork): Promise<Order> {
+    public static buildQuoteProviderOrder(maker: string, makerTokenAddress: string, takerTokenAddress: string, makerTokenAmount: BigNumber, milisecondsToExpire: number, relayerUrl: string, network: EthNetwork): Promise<Order> {
         return QuoteProviderService.buildOrder(maker, makerTokenAddress, takerTokenAddress, makerTokenAmount, milisecondsToExpire, relayerUrl, network);
     }
 
