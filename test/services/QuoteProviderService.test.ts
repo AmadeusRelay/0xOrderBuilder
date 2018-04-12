@@ -3,8 +3,10 @@ import { BigNumber } from "bignumber.js";
 import * as chai from "chai";
 import * as etherUtil from "ethereumjs-util";
 import { EthNetwork } from "../../src/models/EthNetwork";
+import { RelayerConnectionFactory } from "../../src/relayer/RelayerConnectionFactory";
 import { QuoteProviderService } from "../../src/services/QuoteProviderService";
 import { Constants } from "../Constants";
+import { MockRelayerConnection } from "../relayer/MockRelayerConnection";
 
 const mocha = require("mocha");
 const describe = mocha.describe;
@@ -13,6 +15,7 @@ const it = mocha.it;
 const expect = chai.expect;
 
 describe("QuoteProviderService", () => {
+    RelayerConnectionFactory.register((url) => new MockRelayerConnection());
     describe("buildOrder", () => {
         describe("When parameter is correct", () => {
             it("should return order", async () => {

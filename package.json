@@ -52,7 +52,8 @@
       "**/lib/**",
       "test/*",
       "src/index.ts",
-      "src/models/*"
+      "src/models/*",
+      "src/relayer/*"
     ],
     "reporter": [
       "text"

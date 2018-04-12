@@ -1,24 +1,26 @@
 import { ZeroEx } from "0x.js";
-import { HttpClient, TokenPairsItem } from "@0xproject/connect";
+import { TokenPairsItem } from "@0xproject/connect";
 import { Order } from "@0xproject/types";
 import { BigNumber } from "bignumber.js";
 import * as etherUtil from "ethereumjs-util";
 import { Constants } from "../Constants";
 import { EthNetwork } from "../models/EthNetwork";
+import { RelayerConnection } from "../relayer/RelayerConnection";
+import { RelayerConnectionFactory } from "../relayer/RelayerConnectionFactory";
 import { AddressService } from "./AddressService";
 import { TimeService } from "./TimeService";
 
 export class ConnectService {
-    private httpClient: HttpClient;
+    private relayerConnection: RelayerConnection​​;
     private exchangeContractAddress: string;
 
     constructor(relayerUrl: string, network: EthNetwork) {
-        this.httpClient = new HttpClient(relayerUrl);
+        this.relayerConnection = RelayerConnectionFactory.create(relayerUrl);
         this.exchangeContractAddress = AddressService.getExchangekAddress(network);
     }
 
     public getTokenPairs(makerTokenAddress: string, takerTokenAddress: string): Promise<TokenPairsItem[]> {
-        return this.httpClient.getTokenPairsAsync({
+        return this.relayerConnection.getTokenPairsAsync({
             tokenA: makerTokenAddress,
             tokenB: takerTokenAddress,
         }).then((tokenPairs) => {
@@ -39,7 +41,7 @@ export class ConnectService {
             takerTokenAddress: takerTokenAddress,
             takerTokenAmount: takerTokenAmount,
           };
-        return this.httpClient.getFeesAsync(getFeeRequest).then((fee) => {
+        return this.relayerConnection.getFeesAsync(getFeeRequest).then((fee) => {
             return {
                 exchangeContractAddress: getFeeRequest.exchangeContractAddress,
                 expirationUnixTimestampSec: getFeeRequest.expirationUnixTimestampSec,
