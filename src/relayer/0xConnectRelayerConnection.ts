@@ -1,7 +1,7 @@
 import { FeesRequest, FeesResponse, HttpClient, TokenPairsItem, TokenPairsRequestOpts } from "@0xproject/connect";
 import { RelayerConnection } from "./RelayerConnection";
 
-export class ZeroExConnectRelayerConnection implements RelayerConnection​​ {
+export class ZeroExConnectRelayerConnection implements RelayerConnection {
     private httpClient: HttpClient;
 
     constructor(relayerUrl: string) {
@@ -9,11 +9,11 @@ export class ZeroExConnectRelayerConnection implements RelayerConnection​​ {
     }
 
     public getTokenPairsAsync(requestOpts?: TokenPairsRequestOpts): Promise<TokenPairsItem[]> {
-        throw new Error("Method not implemented.");
+        return this.httpClient.getTokenPairsAsync(requestOpts);
     }
 
     public getFeesAsync(request: FeesRequest): Promise<FeesResponse> {
-        throw new Error("Method not implemented.");
+        return this.httpClient.getFeesAsync(request);
     }
 
 }
