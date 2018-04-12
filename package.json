@@ -1,6 +1,6 @@
 {
   "name": "0xorderbuilder",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Llibrary for building orders to use the 0x protocol",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -52,7 +52,8 @@
       "**/lib/**",
       "test/*",
       "src/index.ts",
-      "src/models/*"
+      "src/models/*",
+      "src/relayer/*"
     ],
     "reporter": [
       "text"

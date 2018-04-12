@@ -18,7 +18,7 @@ export class QuoteProviderService {
             if (tokenPair == null) {
                 return new Promise<Order>((resolve) => { resolve(null); });
             }
-            const price = tokenPair.tokenB.maxAmount.dividedBy(tokenPair.tokenA.maxAmount);
+            const price = tokenPair.tokenA.maxAmount.greaterThan(0) ? tokenPair.tokenB.maxAmount.dividedBy(tokenPair.tokenA.maxAmount) : new BigNumber(0);
             const takerTokenAmount = TokenService.getRoundedAmount(price.mul(makerTokenAmount), tokenPair.tokenB.precision);
 
             return connectService.getOrderWithFee(maker, makerTokenAddress, takerTokenAddress, makerTokenAmount, takerTokenAmount, milisecondsToExpire).then((order) => {

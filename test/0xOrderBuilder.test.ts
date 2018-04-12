@@ -5,7 +5,9 @@ import * as etherUtil from "ethereumjs-util";
 import { ZeroExOrderBuilder } from "../src/0xOrderBuilder";
 import { Constants } from "../src/Constants";
 import { EthNetwork } from "../src/models/EthNetwork";
+import { RelayerConnectionFactory } from "../src/relayer/RelayerConnectionFactory";
 import { Constants as ConstantsTest } from "./Constants";
+import { MockRelayerConnection } from "./relayer/MockRelayerConnection";
 
 const mocha = require("mocha");
 const describe = mocha.describe;
@@ -14,6 +16,7 @@ const it = mocha.it;
 const expect = chai.expect;
 
 describe("ZeroExOrderBuilder", () => {
+    RelayerConnectionFactory.register((url) => new MockRelayerConnection());
     describe("buildSignedOrder", () => {
             describe("When order is signed", () => {
             it("should verify signature", () => {
