@@ -20,6 +20,12 @@ export class ConnectService {
     }
 
     public getTokenPairs(makerTokenAddress: string, takerTokenAddress: string): Promise<TokenPairsItem[]> {
+        if (!etherUtil.isValidAddress(makerTokenAddress)) {
+            throw new Error("MakerTokenAddress is not a valid address.");
+        }
+        if (!etherUtil.isValidAddress(takerTokenAddress)) {
+            throw new Error("TakerTokenAddress is not a valid address.");
+        }
         return this.relayerConnection.getTokenPairsAsync({
             tokenA: makerTokenAddress,
             tokenB: takerTokenAddress,
@@ -30,15 +36,24 @@ export class ConnectService {
     }
 
     public getOrderWithFee(maker: string, makerTokenAddress: string, takerTokenAddress: string, makerTokenAmount: BigNumber, takerTokenAmount: BigNumber, milisecondsToExpire: number): Promise<Order> {
+        if (!etherUtil.isValidAddress(maker)) {
+            throw new Error("Maker is not a valid address.");
+        }
+        if (!etherUtil.isValidAddress(makerTokenAddress)) {
+            throw new Error("MakerTokenAddress is not a valid address.");
+        }
+        if (!etherUtil.isValidAddress(takerTokenAddress)) {
+            throw new Error("TakerTokenAddress is not a valid address.");
+        }
         const getFeeRequest = {
-            exchangeContractAddress: this.exchangeContractAddress,
+            exchangeContractAddress: this.exchangeContractAddress.toLocaleLowerCase(),
             expirationUnixTimestampSec: TimeService.getTimeFromNow(milisecondsToExpire),
-            maker: maker,
-            makerTokenAddress: makerTokenAddress,
+            maker: maker.toLocaleLowerCase(),
+            makerTokenAddress: makerTokenAddress.toLocaleLowerCase(),
             makerTokenAmount: makerTokenAmount,
             salt: ZeroEx.generatePseudoRandomSalt(),
             taker: etherUtil.zeroAddress(),
-            takerTokenAddress: takerTokenAddress,
+            takerTokenAddress: takerTokenAddress.toLocaleLowerCase(),
             takerTokenAmount: takerTokenAmount,
           };
         return this.relayerConnection.getFeesAsync(getFeeRequest).then((fee) => {

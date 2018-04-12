@@ -125,8 +125,8 @@ export class MockRelayerConnection implements RelayerConnection​​ {
           },
           tokenB: {
             address: "0x6ff6c0ff1d68b964901f986d4c9fa3ac68346570",
-            maxAmount: new BigNumber("57547150000000000"),
-            minAmount: new BigNumber("4190000000000"),
+            maxAmount: new BigNumber("0"),
+            minAmount: new BigNumber("0"),
             precision: 8,
           },
         },
@@ -161,8 +161,8 @@ export class MockRelayerConnection implements RelayerConnection​​ {
         {
           tokenA: {
             address: "0x6ff6c0ff1d68b964901f986d4c9fa3ac68346570",
-            maxAmount: new BigNumber("1010633440000000000"),
-            minAmount: new BigNumber("4190000000000"),
+            maxAmount: new BigNumber("0"),
+            minAmount: new BigNumber("0"),
             precision: 8,
           },
           tokenB: {
