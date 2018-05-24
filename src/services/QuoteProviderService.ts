@@ -18,8 +18,8 @@ export class QuoteProviderService {
             if (tokenPair == null) {
                 return new Promise<Order>((resolve) => { resolve(null); });
             }
-            const price = tokenPair.tokenA.maxAmount.greaterThan(0) ? tokenPair.tokenB.maxAmount.dividedBy(tokenPair.tokenA.maxAmount) : new BigNumber(0);
-            const takerTokenAmount = TokenService.getRoundedAmount(price.mul(makerTokenAmount), tokenPair.tokenB.precision);
+            const price = QuoteProviderService.calculatePrice(tokenPair);
+            const takerTokenAmount = TokenService.getRoundedAmount(price.mul(makerTokenAmount), tokenPair.tokenA.precision);
 
             return connectService.getOrderWithFee(maker, makerTokenAddress, takerTokenAddress, makerTokenAmount, takerTokenAmount, milisecondsToExpire).then((order) => {
                 return order;
@@ -27,13 +27,19 @@ export class QuoteProviderService {
         }).toPromise();
     }
 
+    private static calculatePrice(tokenPair: TokenPairsItem) {
+        const priceByMax = tokenPair.tokenB.maxAmount.greaterThan(0) ? tokenPair.tokenA.maxAmount.dividedBy(tokenPair.tokenB.maxAmount) : new BigNumber(0);
+        const priceByMin = tokenPair.tokenB.minAmount.greaterThan(0) ? tokenPair.tokenA.minAmount.dividedBy(tokenPair.tokenB.minAmount) : new BigNumber(0);
+        return priceByMax.lessThanOrEqualTo(priceByMin) ? priceByMax : priceByMin;
+    }
+
     private static filterByAmount(tokenPairs: TokenPairsItem[], makerTokenAmount: BigNumber): TokenPairsItem {
         if (!tokenPairs || tokenPairs.length === 0) {
             return null;
         }
         const filteredAmount = tokenPairs.filter((pair) => {
-            const roudedAmount = TokenService.getRoundedAmount(makerTokenAmount, pair.tokenA.precision);
-            return pair.tokenA.minAmount.lessThanOrEqualTo(roudedAmount) && pair.tokenA.maxAmount.greaterThanOrEqualTo(roudedAmount);
+            const roudedAmount = TokenService.getRoundedAmount(makerTokenAmount, pair.tokenB.precision);
+            return pair.tokenB.minAmount.lessThanOrEqualTo(roudedAmount) && pair.tokenB.maxAmount.greaterThanOrEqualTo(roudedAmount);
         });
         return filteredAmount.length > 0 ? filteredAmount[0] : tokenPairs[0];
     }
