@@ -36,7 +36,7 @@ describe("QuoteProviderService", () => {
             }).timeout(10000);
         });
         describe("When price is zero", () => {
-            it("should return orde with takerTokeAmount equals zero", async () => {
+            it("should return order with takerTokeAmount equals zero", async () => {
                 const order = await QuoteProviderService.buildOrder(Constants.DEFAULT_MAKER_ADDRESS,
                     Constants.ZRX_ADDRESS, Constants.REP_ADDRESS, new BigNumber(1000000000),
                     10000, Constants.REALYER_URL, EthNetwork.Kovan);

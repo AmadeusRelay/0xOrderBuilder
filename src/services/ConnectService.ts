@@ -11,7 +11,7 @@ import { AddressService } from "./AddressService";
 import { TimeService } from "./TimeService";
 
 export class ConnectService {
-    private relayerConnection: RelayerConnection​​;
+    private relayerConnection: RelayerConnection;
     private exchangeContractAddress: string;
 
     constructor(relayerUrl: string, network: EthNetwork) {
@@ -30,8 +30,7 @@ export class ConnectService {
             tokenA: makerTokenAddress,
             tokenB: takerTokenAddress,
         }).then((tokenPairs) => {
-            const filteredPairs = this.filterBothPairs(tokenPairs, makerTokenAddress, takerTokenAddress);
-            return this.organizePairs(filteredPairs, makerTokenAddress);
+            return this.filterExactPair(tokenPairs, makerTokenAddress, takerTokenAddress);
         });
     }
 
@@ -74,27 +73,12 @@ export class ConnectService {
         });
     }
 
-    private filterBothPairs(tokenPairs: TokenPairsItem[], makerTokenAddress: string, takerTokenAddress: string): TokenPairsItem[] {
+    private filterExactPair(tokenPairs: TokenPairsItem[], makerTokenAddress: string, takerTokenAddress: string): TokenPairsItem[] {
         return tokenPairs.filter((pair) => {
-            if (pair.tokenA.address === makerTokenAddress && pair.tokenB.address === takerTokenAddress) {
-                return true;
-            }
             if (pair.tokenB.address === makerTokenAddress && pair.tokenA.address === takerTokenAddress) {
                 return true;
             }
             return false;
-        });
-    }
-
-    private organizePairs(tokenPairs: TokenPairsItem[], makerTokenAddress: string): TokenPairsItem[] {
-        return tokenPairs.map((pair) => {
-            if (pair.tokenA.address === makerTokenAddress) {
-                return pair;
-            }
-            return {
-                tokenA: pair.tokenB,
-                tokenB: pair.tokenA,
-            };
         });
     }
 

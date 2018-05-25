@@ -18,10 +18,12 @@ describe("ConnectService", () => {
     RelayerConnectionFactory.register((url) => new MockRelayerConnection());
     describe("getTokenPairs", () => {
         describe("When get valid pairs", () => {
-            it("should return 2 pairs", async () => {
+            it("should return 1 pair", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
                 const pairs = await service.getTokenPairs(Constants.WETH_ADDRESS, Constants.ZRX_ADDRESS);
-                const a = expect(pairs.length === 2).to.be.ok;
+                const len = expect(pairs.length === 1).to.be.ok;
+                const taker = expect(pairs[0].tokenA.address).to.be.equal(Constants.ZRX_ADDRESS);
+                const maker = expect(pairs[0].tokenB.address).to.be.equal(Constants.WETH_ADDRESS);
             }).timeout(10000);
         });
         describe("When get invalid pairs", () => {
