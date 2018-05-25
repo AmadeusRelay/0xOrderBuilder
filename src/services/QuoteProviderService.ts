@@ -27,7 +27,7 @@ export class QuoteProviderService {
         }).toPromise();
     }
 
-    private static calculatePrice(tokenPair: TokenPairsItem) {
+    private static calculatePrice(tokenPair: TokenPairsItem): BigNumber {
         const priceByMax = tokenPair.tokenB.maxAmount.greaterThan(0) ? tokenPair.tokenA.maxAmount.dividedBy(tokenPair.tokenB.maxAmount) : new BigNumber(0);
         const priceByMin = tokenPair.tokenB.minAmount.greaterThan(0) ? tokenPair.tokenA.minAmount.dividedBy(tokenPair.tokenB.minAmount) : new BigNumber(0);
         return priceByMax.lessThanOrEqualTo(priceByMin) ? priceByMax : priceByMin;
