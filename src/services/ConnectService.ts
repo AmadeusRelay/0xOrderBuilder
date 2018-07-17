@@ -5,6 +5,7 @@ import { BigNumber } from "bignumber.js";
 import * as etherUtil from "ethereumjs-util";
 import { Constants } from "../Constants";
 import { EthNetwork } from "../models/EthNetwork";
+import { Price } from "../models/Price";
 import { RelayerConnection } from "../relayer/RelayerConnection";
 import { RelayerConnectionFactory } from "../relayer/RelayerConnectionFactory";
 import { AddressService } from "./AddressService";
@@ -19,19 +20,14 @@ export class ConnectService {
         this.exchangeContractAddress = AddressService.getExchangekAddress(network);
     }
 
-    public getTokenPairs(makerTokenAddress: string, takerTokenAddress: string): Promise<TokenPairsItem[]> {
+    public getPrice(makerTokenAddress: string, takerTokenAddress: string, maker: string): Promise<Price> {
         if (!etherUtil.isValidAddress(makerTokenAddress)) {
             throw new Error("MakerTokenAddress is not a valid address.");
         }
         if (!etherUtil.isValidAddress(takerTokenAddress)) {
             throw new Error("TakerTokenAddress is not a valid address.");
         }
-        return this.relayerConnection.getTokenPairsAsync({
-            tokenA: makerTokenAddress,
-            tokenB: takerTokenAddress,
-        }).then((tokenPairs) => {
-            return this.filterExactPair(tokenPairs, makerTokenAddress, takerTokenAddress);
-        });
+        return this.relayerConnection.getPrice(makerTokenAddress, takerTokenAddress, maker);
     }
 
     public getOrderWithFee(maker: string, makerTokenAddress: string, takerTokenAddress: string, makerTokenAmount: BigNumber, takerTokenAmount: BigNumber, milisecondsToExpire: number): Promise<Order> {
