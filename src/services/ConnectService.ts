@@ -68,14 +68,4 @@ export class ConnectService {
             };
         });
     }
-
-    private filterExactPair(tokenPairs: TokenPairsItem[], makerTokenAddress: string, takerTokenAddress: string): TokenPairsItem[] {
-        return tokenPairs.filter((pair) => {
-            if (pair.tokenB.address === makerTokenAddress && pair.tokenA.address === takerTokenAddress) {
-                return true;
-            }
-            return false;
-        });
-    }
-
 }

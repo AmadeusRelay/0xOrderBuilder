@@ -16,47 +16,36 @@ const expect = chai.expect;
 
 describe("ConnectService", () => {
     RelayerConnectionFactory.register((url) => new MockRelayerConnection());
-    describe("getTokenPairs", () => {
-        describe("When get valid pairs", () => {
-            it("should return 1 pair", async () => {
+    describe("getPrice", () => {
+        describe("When get valid parameters", () => {
+            it("should return price", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
-                const pairs = await service.getTokenPairs(Constants.WETH_ADDRESS, Constants.ZRX_ADDRESS);
-                const len = expect(pairs.length === 1).to.be.ok;
-                const taker = expect(pairs[0].tokenA.address).to.be.equal(Constants.ZRX_ADDRESS);
-                const maker = expect(pairs[0].tokenB.address).to.be.equal(Constants.WETH_ADDRESS);
+                const price = await service.getPrice(Constants.WETH_ADDRESS, Constants.ZRX_ADDRESS, Constants.DEFAULT_MAKER_ADDRESS);
+                const len = expect(price).to.be.exist;
             }).timeout(10000);
         });
-        describe("When get invalid pairs", () => {
-            it("should return 0 pairs", async () => {
-                const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
-                const pairs = await service.getTokenPairs(etherUtil.zeroAddress(), Constants.ZRX_ADDRESS);
-                const a = expect(pairs.length === 0).to.be.ok;
-            }).timeout(10000);
-        });
-        describe("When get null maker token address", () => {
+        describe("When get invalid maker token", () => {
             it("should throw error", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
-                const a = expect(() => service.getTokenPairs(null, Constants.ZRX_ADDRESS)).to.throw(Error, "MakerTokenAddress is not a valid address.");
+                const a = expect(() => service.getPrice("0x1234567890", Constants.ZRX_ADDRESS, Constants.DEFAULT_MAKER_ADDRESS)).to.throw(Error, "MakerTokenAddress is not a valid address.");
             }).timeout(10000);
         });
-        describe("When get invalid maker token address", () => {
+        describe("When get invalid taker token", () => {
             it("should throw error", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
-
-                const a = expect(() => service.getTokenPairs("0x1234567890", Constants.ZRX_ADDRESS)).to.throw(Error, "MakerTokenAddress is not a valid address.");
+                const a = expect(() => service.getPrice(Constants.WETH_ADDRESS, "0x1234567890", Constants.DEFAULT_MAKER_ADDRESS)).to.throw(Error, "TakerTokenAddress is not a valid address.");
             }).timeout(10000);
         });
-        describe("When get null taker token address", () => {
+        describe("When get null maker token", () => {
             it("should throw error", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
-                const a = expect(() => service.getTokenPairs(Constants.ZRX_ADDRESS, null)).to.throw(Error, "TakerTokenAddress is not a valid address.");
+                const a = expect(() => service.getPrice(null, Constants.ZRX_ADDRESS, Constants.DEFAULT_MAKER_ADDRESS)).to.throw(Error, "MakerTokenAddress is not a valid address.");
             }).timeout(10000);
         });
-        describe("When get invalid taker token address", () => {
+        describe("When get null taker token", () => {
             it("should throw error", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
-
-                const a = expect(() => service.getTokenPairs(Constants.ZRX_ADDRESS, "0x1234567890")).to.throw(Error, "TakerTokenAddress is not a valid address.");
+                const a = expect(() => service.getPrice(Constants.WETH_ADDRESS, null, Constants.DEFAULT_MAKER_ADDRESS)).to.throw(Error, "TakerTokenAddress is not a valid address.");
             }).timeout(10000);
         });
     });
