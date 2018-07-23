@@ -14,6 +14,13 @@ export class MockRelayerConnection implements RelayerConnection​​ {
     }
 
     public getPrice(tokenFromAddress: string, tokenToAddress: string, trader: string): Promise<Price> {
+      if (tokenFromAddress !== Constants.REP_ADDRESS && tokenFromAddress !== Constants.WETH_ADDRESS && tokenFromAddress !== Constants.ZRX_ADDRESS) {
+        return new Promise<Price>((resolve) => { resolve(undefined); });
+      }
+      if (tokenToAddress !== Constants.REP_ADDRESS && tokenToAddress !== Constants.WETH_ADDRESS && tokenToAddress !== Constants.ZRX_ADDRESS) {
+        return new Promise<Price>((resolve) => { resolve(undefined); });
+      }
+
       if (tokenFromAddress === Constants.ZRX_ADDRESS && tokenToAddress === Constants.REP_ADDRESS) {
         return Promise.resolve({
           maxAmountFrom: new BigNumber("1010633440000000000"),

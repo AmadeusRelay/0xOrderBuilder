@@ -12,6 +12,9 @@ export class QuoteProviderService {
         const connectService = new ConnectService(relayerUrl, network);
         const promisePrice = connectService.getPrice(makerTokenAddress, takerTokenAddress, maker);
         return Observable.fromPromise(promisePrice).mergeMap((price) => {
+            if (price === undefined) {
+                return new Promise<Order>((resolve) => { resolve(null); });
+            }
             const takerTokenAmount = new BigNumber(price.price).mul(makerTokenAmount).dividedToIntegerBy(1);
 
             return connectService.getOrderWithFee(maker, makerTokenAddress, takerTokenAddress, makerTokenAmount, takerTokenAmount, milisecondsToExpire).then((order) => {
