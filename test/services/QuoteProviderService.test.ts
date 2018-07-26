@@ -29,7 +29,7 @@ describe("QuoteProviderService", () => {
         describe("When parameter is correct, low amount", () => {
             it("should return order", async () => {
                 const order = await QuoteProviderService.buildOrder(Constants.DEFAULT_MAKER_ADDRESS,
-                    Constants.ZRX_ADDRESS, Constants.WETH_ADDRESS, new BigNumber(1000000000),
+                    Constants.ZRX_ADDRESS, Constants.WETH_ADDRESS, new BigNumber(10000),
                     10000, Constants.REALYER_URL, EthNetwork.Kovan);
                 let a = expect(order).to.be.exist;
                 a = expect(order.makerFee.greaterThan(0)).to.be.true;

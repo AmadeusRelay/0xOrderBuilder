@@ -12,12 +12,16 @@ import { MockRelayerConnection } from "./relayer/MockRelayerConnection";
 
 const mocha = require("mocha");
 const describe = mocha.describe;
+const beforeEach = mocha.beforeEach;
 const it = mocha.it;
 
 const expect = chai.expect;
- 
+
 describe("Integration", () => {
-    RelayerConnectionFactory.register((url) => new AmadeusRelayerConnection("http://localhost:3000/api/v0"));
+    beforeEach((done) => {
+        RelayerConnectionFactory.register((url) => new AmadeusRelayerConnection("http://localhost:3000/api/v0"));
+        done();
+    });
     describe("complete flow", () => {
         describe("When parameter is correct", () => {
             it("should return signedOrder", async () => {

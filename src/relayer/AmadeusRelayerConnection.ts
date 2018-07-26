@@ -20,17 +20,12 @@ export class AmadeusRelayerConnection implements RelayerConnection {
     }
 
     public async getPrice(tokenFromAddress: string, tokenToAddress: string, trader: string): Promise<Price> {
-        try
-        {
-            const response = await this.axiosInstance.get("/prices", {
-                params: {
-                    tokenFrom: tokenFromAddress,
-                    tokenTo: tokenToAddress,
-                    trader: trader,
-                }});
-            return response.data;
-        } catch (e) {
-            console.log(e);
-        }
+        const response = await this.axiosInstance.get("/prices", {
+            params: {
+                tokenFrom: tokenFromAddress,
+                tokenTo: tokenToAddress,
+                trader: trader,
+            }});
+        return response.data;
     }
 }
