@@ -10,53 +10,49 @@ import { MockRelayerConnection } from "../relayer/MockRelayerConnection";
 
 const mocha = require("mocha");
 const describe = mocha.describe;
+const beforeEach = mocha.beforeEach;
 const it = mocha.it;
+
+const makerAmount = 1000000000000000000;
+const takerAmount = 1000000000000000;
 
 const expect = chai.expect;
 
 describe("ConnectService", () => {
-    RelayerConnectionFactory.register((url) => new MockRelayerConnection());
-    describe("getTokenPairs", () => {
-        describe("When get valid pairs", () => {
-            it("should return 1 pair", async () => {
+    beforeEach((done) => {
+        RelayerConnectionFactory.register((url) => new MockRelayerConnection());
+        done();
+    });
+    describe("getPrice", () => {
+        describe("When get valid parameters", () => {
+            it("should return price", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
-                const pairs = await service.getTokenPairs(Constants.WETH_ADDRESS, Constants.ZRX_ADDRESS);
-                const len = expect(pairs.length === 1).to.be.ok;
-                const taker = expect(pairs[0].tokenA.address).to.be.equal(Constants.ZRX_ADDRESS);
-                const maker = expect(pairs[0].tokenB.address).to.be.equal(Constants.WETH_ADDRESS);
+                const price = await service.getPrice(Constants.WETH_ADDRESS, Constants.ZRX_ADDRESS, Constants.DEFAULT_MAKER_ADDRESS);
+                const len = expect(price).to.be.exist;
             }).timeout(10000);
         });
-        describe("When get invalid pairs", () => {
-            it("should return 0 pairs", async () => {
-                const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
-                const pairs = await service.getTokenPairs(etherUtil.zeroAddress(), Constants.ZRX_ADDRESS);
-                const a = expect(pairs.length === 0).to.be.ok;
-            }).timeout(10000);
-        });
-        describe("When get null maker token address", () => {
+        describe("When get invalid maker token", () => {
             it("should throw error", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
-                const a = expect(() => service.getTokenPairs(null, Constants.ZRX_ADDRESS)).to.throw(Error, "MakerTokenAddress is not a valid address.");
+                const a = expect(() => service.getPrice("0x1234567890", Constants.ZRX_ADDRESS, Constants.DEFAULT_MAKER_ADDRESS)).to.throw(Error, "MakerTokenAddress is not a valid address.");
             }).timeout(10000);
         });
-        describe("When get invalid maker token address", () => {
+        describe("When get invalid taker token", () => {
             it("should throw error", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
-
-                const a = expect(() => service.getTokenPairs("0x1234567890", Constants.ZRX_ADDRESS)).to.throw(Error, "MakerTokenAddress is not a valid address.");
+                const a = expect(() => service.getPrice(Constants.WETH_ADDRESS, "0x1234567890", Constants.DEFAULT_MAKER_ADDRESS)).to.throw(Error, "TakerTokenAddress is not a valid address.");
             }).timeout(10000);
         });
-        describe("When get null taker token address", () => {
+        describe("When get null maker token", () => {
             it("should throw error", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
-                const a = expect(() => service.getTokenPairs(Constants.ZRX_ADDRESS, null)).to.throw(Error, "TakerTokenAddress is not a valid address.");
+                const a = expect(() => service.getPrice(null, Constants.ZRX_ADDRESS, Constants.DEFAULT_MAKER_ADDRESS)).to.throw(Error, "MakerTokenAddress is not a valid address.");
             }).timeout(10000);
         });
-        describe("When get invalid taker token address", () => {
+        describe("When get null taker token", () => {
             it("should throw error", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
-
-                const a = expect(() => service.getTokenPairs(Constants.ZRX_ADDRESS, "0x1234567890")).to.throw(Error, "TakerTokenAddress is not a valid address.");
+                const a = expect(() => service.getPrice(Constants.WETH_ADDRESS, null, Constants.DEFAULT_MAKER_ADDRESS)).to.throw(Error, "TakerTokenAddress is not a valid address.");
             }).timeout(10000);
         });
     });
@@ -65,8 +61,8 @@ describe("ConnectService", () => {
             it("should return order", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
                 const order = await service.getOrderWithFee(Constants.DEFAULT_MAKER_ADDRESS,
-                    Constants.ZRX_ADDRESS, Constants.WETH_ADDRESS, new BigNumber(100000000000000000000),
-                    new BigNumber(1000000000000000000), 10000);
+                    Constants.ZRX_ADDRESS, Constants.WETH_ADDRESS, new BigNumber(makerAmount),
+                    new BigNumber(takerAmount), 10000);
                 const a = expect(order).to.be.exist;
             }).timeout(10000);
         });
@@ -74,8 +70,8 @@ describe("ConnectService", () => {
             it("should return order", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
                 const order = await service.getOrderWithFee(Constants.MAKER_ADDRESS_INVALID_CASE,
-                    Constants.ZRX_ADDRESS, Constants.WETH_ADDRESS, new BigNumber(100000000000000000000),
-                    new BigNumber(1000000000000000000), 10000);
+                    Constants.ZRX_ADDRESS, Constants.WETH_ADDRESS, new BigNumber(makerAmount),
+                    new BigNumber(takerAmount), 10000);
                 const a = expect(order).to.be.exist;
             }).timeout(10000);
         });
@@ -83,8 +79,8 @@ describe("ConnectService", () => {
             it("should throw error", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
                 const a = expect(() => service.getOrderWithFee(null,
-                    null, Constants.WETH_ADDRESS, new BigNumber(100000000000000000000),
-                    new BigNumber(1000000000000000000), 10000)).to.throw(Error, "Maker is not a valid address.");
+                    null, Constants.WETH_ADDRESS, new BigNumber(makerAmount),
+                    new BigNumber(takerAmount), 10000)).to.throw(Error, "Maker is not a valid address.");
             }).timeout(10000);
         });
         describe("When get invalid maker address", () => {
@@ -92,16 +88,16 @@ describe("ConnectService", () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
 
                 const a = expect(() => service.getOrderWithFee("0x1234567890",
-                    Constants.ZRX_ADDRESS, Constants.WETH_ADDRESS, new BigNumber(100000000000000000000),
-                    new BigNumber(1000000000000000000), 10000)).to.throw(Error, "Maker is not a valid address.");
+                    Constants.ZRX_ADDRESS, Constants.WETH_ADDRESS, new BigNumber(makerAmount),
+                    new BigNumber(takerAmount), 10000)).to.throw(Error, "Maker is not a valid address.");
             }).timeout(10000);
         });
         describe("When get null maker token address", () => {
             it("should throw error", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
                 const a = expect(() => service.getOrderWithFee(Constants.MAKER_ADDRESS_INVALID_CASE,
-                    null, Constants.WETH_ADDRESS, new BigNumber(100000000000000000000),
-                    new BigNumber(1000000000000000000), 10000)).to.throw(Error, "MakerTokenAddress is not a valid address.");
+                    null, Constants.WETH_ADDRESS, new BigNumber(makerAmount),
+                    new BigNumber(takerAmount), 10000)).to.throw(Error, "MakerTokenAddress is not a valid address.");
             }).timeout(10000);
         });
         describe("When get invalid maker token address", () => {
@@ -109,16 +105,16 @@ describe("ConnectService", () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
 
                 const a = expect(() => service.getOrderWithFee(Constants.MAKER_ADDRESS_INVALID_CASE,
-                    "0x1234567890", Constants.WETH_ADDRESS, new BigNumber(100000000000000000000),
-                    new BigNumber(1000000000000000000), 10000)).to.throw(Error, "MakerTokenAddress is not a valid address.");
+                    "0x1234567890", Constants.WETH_ADDRESS, new BigNumber(makerAmount),
+                    new BigNumber(takerAmount), 10000)).to.throw(Error, "MakerTokenAddress is not a valid address.");
             }).timeout(10000);
         });
         describe("When get null taker token address", () => {
             it("should throw error", async () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
                 const a = expect(() => service.getOrderWithFee(Constants.MAKER_ADDRESS_INVALID_CASE,
-                    Constants.ZRX_ADDRESS, null, new BigNumber(100000000000000000000),
-                    new BigNumber(1000000000000000000), 10000)).to.throw(Error, "TakerTokenAddress is not a valid address.");
+                    Constants.ZRX_ADDRESS, null, new BigNumber(makerAmount),
+                    new BigNumber(takerAmount), 10000)).to.throw(Error, "TakerTokenAddress is not a valid address.");
             }).timeout(10000);
         });
         describe("When get invalid taker token address", () => {
@@ -126,8 +122,8 @@ describe("ConnectService", () => {
                 const service = new ConnectService(Constants.REALYER_URL, EthNetwork.Kovan);
 
                 const a = expect(() => service.getOrderWithFee(Constants.MAKER_ADDRESS_INVALID_CASE,
-                    Constants.ZRX_ADDRESS, "0x1234567890", new BigNumber(100000000000000000000),
-                    new BigNumber(1000000000000000000), 10000)).to.throw(Error, "TakerTokenAddress is not a valid address.");
+                    Constants.ZRX_ADDRESS, "0x1234567890", new BigNumber(makerAmount),
+                    new BigNumber(takerAmount), 10000)).to.throw(Error, "TakerTokenAddress is not a valid address.");
             }).timeout(10000);
         });
 

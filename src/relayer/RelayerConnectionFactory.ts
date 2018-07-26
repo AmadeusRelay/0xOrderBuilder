@@ -1,4 +1,4 @@
-import { ZeroExConnectRelayerConnection } from "./0xConnectRelayerConnection";
+import { AmadeusRelayerConnection } from "./AmadeusRelayerConnection";
 import { RelayerConnection } from "./RelayerConnection";
 
 export class RelayerConnectionFactory {
@@ -12,7 +12,7 @@ export class RelayerConnectionFactory {
 
     private static creationMethod: (relayerUrl: string) => RelayerConnection =
         (relayerUrl) => {
-            return new ZeroExConnectRelayerConnection(relayerUrl);
+            return new AmadeusRelayerConnection(relayerUrl);
         }
 
 }

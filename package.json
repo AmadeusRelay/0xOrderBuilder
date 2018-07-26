@@ -1,6 +1,6 @@
 {
   "name": "0xorderbuilder",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "Llibrary for building orders to use the 0x protocol",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -30,6 +30,7 @@
     "0x.js": "0.33.6",
     "@0xproject/connect": "^0.6.8",
     "@0xproject/types": "^0.5.0",
+    "axios": "^0.18.0",
     "ethereumjs-util": "^5.1.2",
     "moment": "^2.22.0",
     "rxjs": "^5.5.8"
